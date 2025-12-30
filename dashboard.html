@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IMS Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+    <nav class="navbar glass-panel">
+        <div class="nav-brand">IMS Portal</div>
+        <button class="menu-toggle">☰</button>
+        <ul class="nav-links">
+            <li><a href="dashboard.html" class="nav-link">Dashboard</a></li>
+            <li><a href="purchase.html" class="nav-link">Purchase</a></li>
+            <li><a href="sale.html" class="nav-link">Sale</a></li>
+            <li><a href="expense.html" class="nav-link">Expense</a></li>
+            <li><a href="reports.html" class="nav-link">Reports</a></li>
+            <li><a href="admin.html" class="nav-link">Admin</a></li>
+            <li><a href="#" id="logoutBtn" class="nav-link btn-danger">Logout</a></li>
+        </ul>
+    </nav>
+
+    <div class="container">
+        <header class="hero" style="text-align: left; padding: 1rem 0;">
+            <h1 id="welcomeSafe">Dashboard</h1>
+            <p>Welcome back, here is your daily overview.</p>
+        </header>
+
+        <div class="card-grid">
+            <div class="glass-panel card">
+                <h3>Total Products</h3>
+                <div class="value" id="totalProducts">0</div>
+            </div>
+            <div class="glass-panel card">
+                <h3>Total Quantity</h3>
+                <div class="value" id="totalQty">0</div>
+            </div>
+            <div class="glass-panel card">
+                <h3>Sales Today</h3>
+                <div class="value" id="salesToday">Rs. 0</div>
+            </div>
+            <div class="glass-panel card">
+                <h3>Low Stock Items</h3>
+                <div class="value" id="lowStock">0</div>
+            </div>
+        </div>
+
+        <div class="glass-panel card mt-4">
+            <h3>Recent Activity</h3>
+            <div class="table-container">
+                <table id="recentActivityTable">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Type</th>
+                            <th>Item</th>
+                            <th>Quantity</th>
+                            <th>Value</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Populated by JS -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        // Check Auth
+        const user = app.checkAuth();
+        if (user) {
+            document.getElementById('welcomeSafe').textContent = `Dashboard (${user.role})`;
+        }
+
+        // Load Dashboard Data
+        const inventory = app.getInventory();
+        const sales = app.getSales();
+        const purchases = app.getPurchases();
+
+        // Stats
+        document.getElementById('totalProducts').textContent = inventory.length;
+        document.getElementById('totalQty').textContent = inventory.reduce((sum, i) => sum + i.quantity, 0);
+
+        // Sales Today
+        const today = new Date().toISOString().split('T')[0];
+        const todaysSales = sales.filter(s => s.date.startsWith(today));
+        const salesTotal = todaysSales.reduce((sum, s) => sum + s.total, 0);
+        document.getElementById('salesToday').textContent = 'Rs. ' + salesTotal.toFixed(2);
+
+        // Low Stock (Arbitrary < 10)
+        let lowStockCount = inventory.filter(i => i.quantity < 10).length;
+        document.getElementById('lowStock').textContent = lowStockCount;
+
+        // Recent Activity (Merge Sales/Purchases, sort by date)
+        const activity = [
+            ...sales.map(s => ({ ...s, type: 'Sale', value: s.total })),
+            ...purchases.map(p => ({ ...p, type: 'Purchase', value: p.cost * p.quantity }))
+        ].sort((a, b) => new Date(b.date) - new Date(a.date)).slice(0, 5);
+
+        const tbody = document.querySelector('#recentActivityTable tbody');
+        if (activity.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="5" style="text-align:center">No activity yet.</td></tr>';
+        } else {
+            activity.forEach(item => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                            <td>${new Date(item.date).toLocaleDateString()}</td>
+                            <td><span style="color: ${item.type === 'Sale' ? '#34d399' : '#fbbf24'}">${item.type}</span></td>
+                            <td>${item.itemName}</td>
+                            <td>${item.quantity}</td>
+                            <td>Rs. ${item.value.toFixed(2)}</td>
+                        `;
+                tbody.appendChild(tr);
+            });
+        }
+
+    </script>
+</body>
+
+</html>
