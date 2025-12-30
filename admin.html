@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#f1f5f9">
     <title>IMS Admin</title>
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -107,19 +108,20 @@
 
                 const isSelf = user.username === app.getCurrentUser().username;
 
-                let actions = '';
+                let actions = '<div style="display:flex; flex-direction:column; gap:0.5rem;">';
                 if (!isSelf && user.role !== 'Admin') {
                     if (user.status === 'Pending' || user.status === 'Hold') {
-                        actions += `<button onclick="updateStatus('${user.id}', 'Approved')" class="btn-primary" style="padding: 0.25rem 0.5rem; font-size: 0.8rem; margin-right: 0.5rem;">Approve</button>`;
+                        actions += `<button onclick="updateStatus('${user.id}', 'Approved')" class="btn-primary" style="padding: 0.25rem 0.5rem; font-size: 0.8rem;">Approve</button>`;
                     }
                     if (user.status === 'Approved') {
-                        actions += `<button onclick="updateStatus('${user.id}', 'Hold')" class="btn-primary" style="background:#fbbf24; padding: 0.25rem 0.5rem; font-size: 0.8rem; margin-right: 0.5rem;">Hold</button>`;
+                        actions += `<button onclick="updateStatus('${user.id}', 'Hold')" class="btn-primary" style="background:#fbbf24; padding: 0.25rem 0.5rem; font-size: 0.8rem;">Hold</button>`;
                     }
-                    actions += `<button onclick="resetUserPassword('${user.id}')" class="btn-primary" style="background:#3b82f6; padding: 0.25rem 0.5rem; font-size: 0.8rem; margin-right: 0.5rem;">Reset Pass</button>`;
+                    actions += `<button onclick="resetUserPassword('${user.id}')" class="btn-primary" style="background:#3b82f6; padding: 0.25rem 0.5rem; font-size: 0.8rem;">Reset Pass</button>`;
                     actions += `<button onclick="updateStatus('${user.id}', 'Delete')" class="btn-primary" style="background:#ef4444; padding: 0.25rem 0.5rem; font-size: 0.8rem;">Delete</button>`;
                 } else {
-                    actions = '<span style="color:var(--text-muted)">-</span>';
+                    actions += '<span style="color:var(--text-muted)">-</span>';
                 }
+                actions += '</div>';
 
                 // If user doesn't have contact person (like old admin), show '-'
                 const contact = user.contactPerson || '-';

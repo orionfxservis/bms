@@ -331,3 +331,44 @@ th {
     transform: scale(1.1);
     box-shadow: 2px 2px 10px rgba(37, 211, 102, 0.5);
 }
+
+/* Mobile Optimizations */
+@media (max-width: 768px) {
+    .container {
+        padding: 0 1rem;
+        /* Ensure padding on small screens */
+    }
+
+    .card {
+        padding: 1rem;
+        /* Compact padding for cards */
+    }
+
+    .hero h1 {
+        font-size: 2rem;
+        /* Smaller heading on mobile */
+    }
+
+    .filter-bar {
+        flex-direction: column;
+        /* Stack filters vertically */
+        align-items: stretch;
+    }
+
+    .filter-bar select,
+    .filter-bar input {
+        width: 100%;
+        /* Full width inputs */
+    }
+
+    .auth-card {
+        padding: 1rem;
+    }
+
+    /* Adjust table fonts for readability */
+    th,
+    td {
+        padding: 0.75rem 0.5rem;
+        font-size: 0.9rem;
+    }
+}
