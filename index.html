@@ -130,8 +130,12 @@
 
             <form id="loginForm">
                 <div class="form-group">
-                    <label>Company Name (or Admin)</label>
-                    <input type="text" id="loginUser" required placeholder="Enter User Name">
+                    <label>Company Name</label>
+                    <input type="text" id="loginUser" required placeholder="Enter Company Name">
+                </div>
+                <div class="form-group">
+                    <label>Customer Name</label>
+                    <input type="text" id="loginCustomer" required placeholder="Enter Customer Name">
                 </div>
                 <div class="form-group">
                     <label>Password</label>
@@ -149,8 +153,8 @@
                     <input type="text" id="regCompany" required placeholder="e.g. Acme Corp">
                 </div>
                 <div class="form-group">
-                    <label>User Name</label>
-                    <input type="text" id="regUsername" required placeholder="e.g. acme_admin">
+                    <label>Customer Name</label>
+                    <input type="text" id="regCustomer" required placeholder="e.g. John Doe">
                 </div>
                 <div class="form-group">
                     <label>Password</label>
@@ -188,10 +192,11 @@
 
         loginForm.addEventListener('submit', (e) => {
             e.preventDefault();
-            const u = document.getElementById('loginUser').value;
-            const p = document.getElementById('loginPass').value;
+            const u = document.getElementById('loginUser').value.trim();
+            const c = document.getElementById('loginCustomer').value.trim();
+            const p = document.getElementById('loginPass').value.trim();
 
-            const result = app.login(u, p);
+            const result = app.login(u, c, p);
             if (result.success) {
                 window.location.href = 'dashboard.html';
             } else {
@@ -202,19 +207,19 @@
         registerForm.addEventListener('submit', (e) => {
             e.preventDefault();
             const company = document.getElementById('regCompany').value;
-            const username = document.getElementById('regUsername').value;
+            const customer = document.getElementById('regCustomer').value;
             const p = document.getElementById('regPass').value;
             const cp = document.getElementById('regPassConfirm').value;
 
             if (p !== cp) return alert("Passwords do not match");
 
-            const result = app.register(company, username, p);
+            const result = app.register(company, customer, p);
             if (result.success) {
                 alert(result.message);
 
                 // WhatsApp Admin Notification
                 const adminPhone = "+923330360487";
-                const msg = `*New Registration Request*\n\n*Company:* ${company}\n*User Name:* ${username}\n\nPlease approve this account.`;
+                const msg = `*New Registration Request*\n\n*Company:* ${company}\n*Customer:* ${customer}\n\nPlease approve this account.`;
                 const url = `https://wa.me/${adminPhone}?text=${encodeURIComponent(msg)}`;
                 window.open(url, '_blank');
 

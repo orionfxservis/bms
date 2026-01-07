@@ -11,7 +11,8 @@ const DB_KEYS = {
     PURCHASES: 'ims_purchases',
     CURRENT_USER: 'ims_current_user',
     EXPENSES: 'ims_expenses', // New Key
-    BANNER: 'ims_banner' // New Key
+    BANNER: 'ims_banner', // New Key
+    VERSION: '1.0.1' // Cache busting key
 };
 
 const ROLES = {
@@ -22,8 +23,9 @@ const ROLES = {
 // Initial Mock Data (If empty)
 const INITIAL_ADMIN = {
     id: 'admin_001',
-    companyName: 'System Admin',
-    username: 'admin',
+    companyName: 'Admin', // Matches username for consistency
+    username: 'Admin',
+    contactPerson: 'Admin',
     password: 'admin123', // In real app, hash this!
     role: ROLES.ADMIN,
     status: 'Approved'
@@ -36,48 +38,76 @@ class BMS_Core {
     }
 
     initStorage() {
-        if (!localStorage.getItem(DB_KEYS.USERS)) {
-            localStorage.setItem(DB_KEYS.USERS, JSON.stringify([INITIAL_ADMIN]));
-        }
-        if (!localStorage.getItem(DB_KEYS.INVENTORY)) {
-            localStorage.setItem(DB_KEYS.INVENTORY, JSON.stringify([]));
-        }
+        // ALWAYS ensure the default admin exists and is up to date
+        // This fixes any data corruption or legacy data issues
+        let users = [];
+        try {
+            users = JSON.parse(localStorage.getItem(DB_KEYS.USERS)) || [];
+        } catch (e) { users = []; }
+
+        // Remove any existing admin_001 to replace with fresh copy
+        users = users.filter(u => u.id !== 'admin_001');
+        users.unshift(INITIAL_ADMIN); // Add fresh Admin at top
+
+        localStorage.setItem(DB_KEYS.USERS, JSON.stringify(users));
+
+        // Init other keys
+        if (!localStorage.getItem(DB_KEYS.INVENTORY)) localStorage.setItem(DB_KEYS.INVENTORY, JSON.stringify([]));
         if (!localStorage.getItem(DB_KEYS.SALES)) localStorage.setItem(DB_KEYS.SALES, JSON.stringify([]));
         if (!localStorage.getItem(DB_KEYS.PURCHASES)) localStorage.setItem(DB_KEYS.PURCHASES, JSON.stringify([]));
-        if (!localStorage.getItem(DB_KEYS.EXPENSES)) localStorage.setItem(DB_KEYS.EXPENSES, JSON.stringify([])); // Init Expenses
-        if (!localStorage.getItem(DB_KEYS.BANNER)) localStorage.setItem(DB_KEYS.BANNER, ''); // Init Banner
+        if (!localStorage.getItem(DB_KEYS.EXPENSES)) localStorage.setItem(DB_KEYS.EXPENSES, JSON.stringify([]));
+        if (!localStorage.getItem(DB_KEYS.BANNER)) localStorage.setItem(DB_KEYS.BANNER, '');
     }
 
     // --- Authentication ---
-    login(username, password) {
+    login(username, customerName, password) {
+        // Trim inputs to handle accidental spaces
+        username = username.trim();
+        customerName = customerName.trim();
+        password = password.trim();
+
         const users = JSON.parse(localStorage.getItem(DB_KEYS.USERS));
-        console.log("Attempting login for:", username);
 
-        // precise match for password, case-insensitive for username
-        const user = users.find(u => u.username.toLowerCase() === username.toLowerCase() && u.password === password);
+        // 1. Find by Company Name (Username)
+        const companyMatch = users.find(u =>
+            u.username.toLowerCase() === username.toLowerCase()
+        );
 
-        if (!user) {
-            // Debug help for user
-            console.warn("Login failed. User not found or password mismatch.");
-            return { success: false, message: 'Invalid credentials. Please check capitalization.' };
+        if (!companyMatch) {
+            return { success: false, message: `Company '${username}' not found.` };
         }
+
+        // 2. Check Customer Name
+        if ((companyMatch.contactPerson || '').toLowerCase() !== customerName.toLowerCase()) {
+            return { success: false, message: `Incorrect Customer Name for '${username}'.` };
+        }
+
+        // 3. Check Password
+        if (companyMatch.password !== password) {
+            return { success: false, message: 'Incorrect Password.' };
+        }
+
+        const user = companyMatch;
+
         if (user.status !== 'Approved') return { success: false, message: 'Account not approved yet' };
 
         localStorage.setItem(DB_KEYS.CURRENT_USER, JSON.stringify(user));
         return { success: true, user };
     }
 
-    register(companyName, username, password) {
+    register(companyName, contactPerson, password) {
         const users = JSON.parse(localStorage.getItem(DB_KEYS.USERS));
         // Check if company name (username) already exists
+        const username = companyName; // Use Company Name as the unique username
         if (users.find(u => u.username.toLowerCase() === username.toLowerCase())) {
-            return { success: false, message: 'User Name already taken' };
+            return { success: false, message: 'Company Name already registered' };
         }
 
         const newUser = {
             id: 'user_' + Date.now(),
             companyName: companyName,
-            username: username, // Keep original casing for display
+            username: username, // Using Company Name as ID
+            contactPerson: contactPerson, // New Field
             password: password,
             role: ROLES.USER,
             status: 'Pending' // Default to pending

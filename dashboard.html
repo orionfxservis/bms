@@ -85,19 +85,45 @@
         const sales = app.getSales();
         const purchases = app.getPurchases();
 
-        // Stats
-        document.getElementById('totalProducts').textContent = inventory.length;
-        document.getElementById('totalQty').textContent = inventory.reduce((sum, i) => sum + i.quantity, 0);
+        // Stats logic
+        if (user.role === 'Admin') {
+            // Admin View: Total Users & Logging (Approved) Users
+            const allUsers = app.getUsers();
 
-        // Sales Today
-        const today = new Date().toISOString().split('T')[0];
-        const todaysSales = sales.filter(s => s.date.startsWith(today));
-        const salesTotal = todaysSales.reduce((sum, s) => sum + s.total, 0);
-        document.getElementById('salesToday').textContent = 'Rs. ' + salesTotal.toFixed(2);
+            // 1. Total Users
+            document.querySelector('.card-grid .card:nth-child(1) h3').textContent = "Total Users";
+            document.getElementById('totalProducts').textContent = allUsers.length;
 
-        // Low Stock (Arbitrary < 10)
-        let lowStockCount = inventory.filter(i => i.quantity < 10).length;
-        document.getElementById('lowStock').textContent = lowStockCount;
+            // 2. Logging Users (interpreted as Approved/Active Users)
+            document.querySelector('.card-grid .card:nth-child(2) h3').textContent = "Logging Users";
+            const approvedUsers = allUsers.filter(u => u.status === 'Approved').length;
+            document.getElementById('totalQty').textContent = approvedUsers;
+
+            // 3. Current Users (Mapping to 'Pending' / New Requests)
+            document.querySelector('.card-grid .card:nth-child(3) h3').textContent = "Current Users";
+            const pendingUsers = allUsers.filter(u => u.status === 'Pending').length;
+            document.getElementById('salesToday').textContent = pendingUsers;
+
+            // 4. Block Users (Held)
+            document.querySelector('.card-grid .card:nth-child(4) h3').textContent = "Block Users";
+            const blockedUsers = allUsers.filter(u => u.status === 'Hold').length;
+            document.getElementById('lowStock').textContent = blockedUsers;
+
+        } else {
+            // User View: Inventory Stats
+            document.getElementById('totalProducts').textContent = inventory.length;
+            document.getElementById('totalQty').textContent = inventory.reduce((sum, i) => sum + i.quantity, 0);
+
+            // Sales Today
+            const today = new Date().toISOString().split('T')[0];
+            const todaysSales = sales.filter(s => s.date.startsWith(today));
+            const salesTotal = todaysSales.reduce((sum, s) => sum + s.total, 0);
+            document.getElementById('salesToday').textContent = 'Rs. ' + salesTotal.toFixed(2);
+
+            // Low Stock
+            let lowStockCount = inventory.filter(i => i.quantity < 10).length;
+            document.getElementById('lowStock').textContent = lowStockCount;
+        }
 
         // Recent Activity (Merge Sales/Purchases, sort by date)
         const activity = [
