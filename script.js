@@ -287,6 +287,10 @@ class BMS_Core {
         return true;
     }
 
+    getVerticalBanner() {
+        return localStorage.getItem(DB_KEYS.VERTICAL_BANNER) || '';
+    }
+
     setVerticalBanner(url) {
         localStorage.setItem(DB_KEYS.VERTICAL_BANNER, url);
         this.cloud.pushRecord(DB_KEYS.VERTICAL_BANNER, { key: DB_KEYS.VERTICAL_BANNER, value: url });

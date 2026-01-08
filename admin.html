@@ -145,51 +145,73 @@
 
         window.updateCloudUrl = async function () {
             const url = cloudUrlInput.value.trim();
-            if (!url) return alert('Please enter a URL');
+            const statusDiv = document.getElementById('cloudStatus');
+
+            if (!url) {
+                statusDiv.textContent = 'Please enter a URL';
+                statusDiv.style.color = 'red';
+                return;
+            }
 
             // 1. Basic Validation
             if (!url.includes('script.google.com')) {
-                return alert('Invalid URL. It must be a Google Script URL.');
+                statusDiv.textContent = 'Invalid URL: Must be script.google.com';
+                statusDiv.style.color = 'red';
+                return;
             }
             if (!url.endsWith('/exec')) {
-                return alert('Invalid URL. \n\nIt must end with "/exec". \n\nMake sure you copied the "Web App URL" from the Deployment window, not the browser address bar.');
+                statusDiv.textContent = 'Invalid URL: Must end in /exec';
+                statusDiv.style.color = 'red';
+                return;
             }
 
             app.cloud.setUrl(url);
-            cloudStatus.textContent = 'Testing Connection... (This may take a few seconds)';
-            cloudStatus.style.color = '#fbbf24'; // Yellow
+            statusDiv.innerHTML = 'Connecting to Google... <span id="loadingDots">...</span>';
+            statusDiv.style.color = '#fbbf24'; // Yellow
+
+            // Animation for visual feedback
+            let dots = 0;
+            const timer = setInterval(() => {
+                dots = (dots + 1) % 4;
+                const el = document.getElementById('loadingDots');
+                if (el) el.textContent = '.'.repeat(dots);
+            }, 500);
 
             try {
                 const res = await app.cloud.syncDown();
+                clearInterval(timer);
 
                 if (res.success) {
-                    cloudStatus.textContent = 'Connected! ' + res.message;
-                    cloudStatus.style.color = '#34d399'; // Green
-                    alert('Success! Connected and Data Synced.');
+                    statusDiv.textContent = '✓ Connected! Data Synced Successfully.';
+                    statusDiv.style.color = '#34d399'; // Green
+                    // Refresh Preview if banners came in
+                    const banner = app.getBanner();
+                    if (banner) {
+                        document.getElementById('bannerPreview').innerHTML = `<img src="${banner}" style="width: 100%; height: 100%; object-fit: cover;">`;
+                        document.getElementById('bannerUrlInput').value = banner;
+                    }
                 } else {
                     console.error('Sync Error:', res);
-                    cloudStatus.textContent = 'Error: ' + res.message;
-                    cloudStatus.style.color = '#f87171'; // Red
-
-                    // User friendly error mapping
                     let msg = res.message;
-                    if (msg.includes('Unexpected token')) msg = 'Got HTML instead of Data. \npermission Issue? \nDid you set "Who has access" to "Anyone"?';
-                    if (msg.includes('Failed to fetch')) msg = 'Network Error. \nPossible CORS issue. \nTry using a different browser or Incognito mode to test.';
+                    if (msg.includes('Unexpected token')) msg = 'Permission Error: Set Deployment to "Anyone"';
+                    if (msg.includes('Failed to fetch')) msg = 'Network Error: Check CORS / Deployment';
 
-                    alert('Connection Failed:\n' + msg);
+                    statusDiv.textContent = '❌ Failed: ' + msg;
+                    statusDiv.style.color = '#f87171'; // Red
                 }
             } catch (err) {
+                clearInterval(timer);
                 console.error('Unexpected Error:', err);
-                cloudStatus.textContent = 'Critical Error: ' + err.message;
-                cloudStatus.style.color = '#ef4444';
-                alert('Critical Error:\n' + err.message);
+                statusDiv.textContent = '❌ Critical Error: ' + err.message;
+                statusDiv.style.color = '#ef4444';
             }
         };
 
         window.updateBanner = function () {
             const url = bannerInput.value;
             if (app.setBanner(url)) {
-                bannerPreview.innerHTML = `<img src="${url}" style="width: 100%; height: 100%; object-fit: cover;">`;
+                // Add onerror to detect broken links
+                bannerPreview.innerHTML = `<img src="${url}" style="width: 100%; height: 100%; object-fit: cover;" onerror="alert('Error: Image failed to load. Check the URL.')">`;
                 alert('Horizontal Banner updated! Check the Login page.');
             }
         };
@@ -197,7 +219,7 @@
         window.updateVerticalBanner = function () {
             const url = vBannerInput.value;
             if (app.setVerticalBanner(url)) {
-                vBannerPreview.innerHTML = `<img src="${url}" style="width: 100%; height: 100%; object-fit: cover;">`;
+                vBannerPreview.innerHTML = `<img src="${url}" style="width: 100%; height: 100%; object-fit: cover;" onerror="alert('Error: Image failed to load. Check the URL.')">`;
                 alert('Vertical Banner updated! Check Dashboard pages.');
             }
         };
