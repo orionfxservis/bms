@@ -1,254 +1,367 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="theme-color" content="#f1f5f9">
-    <title>BMS - Business Management System</title>
-    <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        .login-wrapper {
-            display: flex;
-            min-height: 100vh;
-            align-items: center;
-            justify-content: center;
-            padding: 2rem;
-            gap: 4rem;
-            max-width: 1400px;
-            margin: 0 auto;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#f1f5f9" />
 
-        .brand-section {
-            flex: 1;
-            color: var(--text-main);
-        }
+  <title>BMS - Business Management System</title>
 
-        .main-heading {
-            font-size: 3.5rem;
-            font-weight: 800;
-            line-height: 1.2;
-            margin-bottom: 1.5rem;
-            background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
-            /* Use Theme Colors */
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            /* text-shadow: 0 10px 30px rgba(0, 0, 0, 0.5); Removed dark shadow for light theme */
-        }
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
-        .tag-line {
-            font-size: 1.5rem;
-            color: var(--accent-color);
-            font-weight: 500;
-            margin-bottom: 2rem;
-            display: block;
-        }
+  <style>
+    :root {
+      --primary-color: #2563eb;
+      --secondary-color: #06b6d4;
+      --accent-color: #0284c7;
 
-        .description {
-            font-size: 1.1rem;
-            color: var(--text-muted);
-            line-height: 1.6;
-            max-width: 600px;
-        }
+      --bg-main: #f1f5f9;
+      --bg-card: rgba(255, 255, 255, 0.85);
 
-        .auth-card {
-            width: 100%;
-            max-width: 380px;
-            /* Reduced from 450px */
-            padding: 1.5rem;
-            /* Further reduced padding */
-            flex-shrink: 0;
-            background: rgba(30, 41, 59, 0.6);
-            /* Slightly more transparent */
-            backdrop-filter: blur(20px);
-        }
+      --text-main: #0f172a;
+      --text-muted: #475569;
 
-        /* Compact Form Elements for Auth Card */
-        .auth-card .form-group {
-            margin-bottom: 0.8rem;
-            /* Reduced from 1.5rem */
-        }
+      --border-soft: rgba(0, 0, 0, 0.08);
+    }
 
-        .auth-card label {
-            margin-bottom: 0.2rem;
-            font-size: 0.9rem;
-        }
+    * {
+      box-sizing: border-box;
+    }
 
-        .auth-card input {
-            padding: 0.6rem;
-            /* Slightly smaller input */
-        }
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      min-height: 100%;
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(180deg, #f8fafc, #eef2f7);
+      color: var(--text-main);
+      overflow-x: hidden;
+    }
 
-        .auth-card h2 {
-            margin-bottom: 1rem !important;
-            /* Reduce header margin */
-        }
+    img {
+      max-width: 100%;
+      height: auto;
+      display: block;
+    }
 
-        /* Mobile Responsive */
-        @media (max-width: 900px) {
-            .login-wrapper {
-                flex-direction: column;
-                text-align: center;
-                gap: 2rem;
-            }
+    /* =========================
+       LAYOUT
+    ========================= */
 
-            .brand-section {
-                padding-top: 2rem;
-            }
+    .login-wrapper {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      gap: 4rem;
+      padding: 2rem;
+      max-width: 1400px;
+      margin: auto;
+    }
 
-            .main-heading {
-                font-size: 2.5rem;
-            }
-        }
-    </style>
+    .brand-section {
+      flex: 1;
+    }
+
+    .auth-card {
+      width: 100%;
+      max-width: 380px;
+      padding: 1.5rem;
+      background: var(--bg-card);
+      backdrop-filter: blur(10px);
+      border-radius: 16px;
+      border: 1px solid var(--border-soft);
+      box-shadow: 0 15px 40px rgba(0,0,0,0.08);
+    }
+
+    /* =========================
+       BRAND CONTENT
+    ========================= */
+
+    .main-heading {
+      font-size: clamp(2.2rem, 5vw, 3.4rem);
+      font-weight: 800;
+      line-height: 1.2;
+      margin-bottom: 1rem;
+      background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .description {
+      font-size: clamp(0.95rem, 2.5vw, 1.1rem);
+      color: var(--text-muted);
+      max-width: 620px;
+      line-height: 1.6;
+    }
+
+    #mainBanner {
+      margin-top: 2.5rem;
+      width: 100%;
+      max-width: 720px;
+      height: 120px;
+      background: #ffffff;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px dashed var(--border-soft);
+      overflow: hidden;
+      color: #94a3b8;
+      font-size: 0.9rem;
+    }
+
+    /* =========================
+       AUTH FORMS
+    ========================= */
+
+    h2.brand-title {
+      text-align: center;
+      margin-bottom: 1.2rem;
+      font-size: 1.7rem;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    .form-group {
+      margin-bottom: 0.8rem;
+    }
+
+    label {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      display: block;
+      margin-bottom: 0.2rem;
+    }
+
+    input {
+      width: 100%;
+      padding: 0.65rem;
+      border-radius: 8px;
+      border: 1px solid var(--border-soft);
+      background: white;
+      color: var(--text-main);
+      outline: none;
+      font-size: 16px;
+    }
+
+    input:focus {
+      border-color: var(--primary-color);
+    }
+
+    .btn-primary {
+      width: 100%;
+      padding: 0.7rem;
+      margin-top: 0.6rem;
+      background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+      border: none;
+      border-radius: 10px;
+      font-weight: 600;
+      color: white;
+      cursor: pointer;
+    }
+
+    .btn-primary:hover {
+      opacity: 0.95;
+    }
+
+    .toggle-auth {
+      text-align: center;
+      margin-top: 0.8rem;
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+
+    .toggle-auth a {
+      color: var(--accent-color);
+      cursor: pointer;
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    /* =========================
+       WHATSAPP BUTTON
+    ========================= */
+
+    .whatsapp-float {
+      position: fixed;
+      right: 16px;
+      bottom: 20px;
+      width: 56px;
+      height: 56px;
+      background: #25D366;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+
+    /* =========================
+       MOBILE
+    ========================= */
+
+    @media (max-width: 900px) {
+      .login-wrapper {
+        flex-direction: column;
+        gap: 2rem;
+        padding: 1.5rem 1rem;
+        text-align: center;
+      }
+
+      .auth-card {
+        max-width: 100%;
+      }
+
+      #mainBanner {
+        height: auto;
+        min-height: 80px;
+      }
+    }
+  </style>
 </head>
 
 <body>
 
-    <div class="login-wrapper">
-        <!-- BRAND SECTION (LEFT) -->
-        <div class="brand-section">
-            <h1 class="main-heading">Cloud Base Business Management System</h1>
+  <div class="login-wrapper">
 
-            <p class="description">
-                "اپنے کاروبار کو جدید اسٹاک مینجمنٹ کے ساتھ مضبوط بنائیں — سیلز ٹریک کریں،
-                وینڈرز کو منظم کریں اور فوری رپورٹس حاصل کریں،
-                کہیں سے بھی۔" </p>
+    <!-- BRAND SECTION -->
+    <div class="brand-section">
+      <h1 class="main-heading">Cloud Based Business Management System</h1>
 
-            <!-- Banner Holder -->
-            <div id="mainBanner"
-                style="max-width: 100%; width: 720px; height: 120px; background: rgba(255,255,255,0.05); margin-top: 3rem; border-radius: 12px; overflow: hidden; display: flex; align-items: center; justify-content: center; border: 1px solid rgba(255,255,255,0.1);">
-                <span style="color: rgba(255,255,255,0.3); font-size: 0.9rem;">Banner Ad Area (720x120)</span>
-            </div>
-        </div>
+      <p class="description">
+        اپنے کاروبار کو جدید اسٹاک مینجمنٹ کے ساتھ مضبوط بنائیں —
+        سیلز ٹریک کریں، وینڈرز کو منظم کریں اور فوری رپورٹس حاصل کریں،
+        کہیں سے بھی۔
+      </p>
 
-        <!-- LOGIN SECTION (RIGHT) -->
-        <div class="glass-panel auth-card">
-            <h2 class="brand-title" style="margin-bottom: 1.5rem; font-size: 1.8rem">Welcome Back</h2>
-
-            <form id="loginForm">
-                <div class="form-group">
-                    <label>Company Name</label>
-                    <input type="text" id="loginUser" required placeholder="Enter Company Name" autocapitalize="off"
-                        autocorrect="off" spellcheck="false">
-                </div>
-                <div class="form-group">
-                    <label>Customer Name</label>
-                    <input type="text" id="loginCustomer" required placeholder="Enter Customer Name"
-                        autocapitalize="off" autocorrect="off" spellcheck="false">
-                </div>
-                <div class="form-group">
-                    <label>Password</label>
-                    <input type="password" id="loginPass" required placeholder="Enter password">
-                </div>
-                <button type="submit" class="btn-primary" style="width: 100%; margin-top: 0.5rem">Sign In</button>
-                <div class="toggle-auth">
-                    Don't have an account? <a onclick="showRegister()">Register Company</a>
-                </div>
-            </form>
-
-            <form id="registerForm" class="hidden">
-                <div class="form-group">
-                    <label>Company Name</label>
-                    <input type="text" id="regCompany" required placeholder="e.g. Acme Corp">
-                </div>
-                <div class="form-group">
-                    <label>Customer Name</label>
-                    <input type="text" id="regCustomer" required placeholder="e.g. John Doe">
-                </div>
-                <div class="form-group">
-                    <label>Password</label>
-                    <input type="password" id="regPass" required>
-                </div>
-                <div class="form-group">
-                    <label>Confirm Password</label>
-                    <input type="password" id="regPassConfirm" required>
-                </div>
-                <button type="submit" class="btn-primary" style="width: 100%">Register Company</button>
-                <div class="toggle-auth">
-                    Already have an account? <a onclick="showLogin()">Sign In</a>
-                </div>
-            </form>
-        </div>
+      <div id="mainBanner">
+        Banner Ad Area (720×120)
+      </div>
     </div>
 
-    <script src="script.js"></script>
-    <script>
-        // Local Login/Register Logic for this page
-        const loginForm = document.getElementById('loginForm');
-        const registerForm = document.getElementById('registerForm');
+    <!-- AUTH CARD -->
+    <div class="auth-card">
+      <h2 class="brand-title">Welcome Back</h2>
 
-        function showRegister() {
-            loginForm.classList.add('hidden');
-            registerForm.classList.remove('hidden');
-            document.querySelector('.brand-title').textContent = "IMS Register";
-        }
+      <form id="loginForm">
+        <div class="form-group">
+          <label>Company Name</label>
+          <input type="text" id="loginUser" required>
+        </div>
 
-        function showLogin() {
-            registerForm.classList.add('hidden');
-            loginForm.classList.remove('hidden');
-            document.querySelector('.brand-title').textContent = "IMS Login";
-        }
+        <div class="form-group">
+          <label>Customer Name</label>
+          <input type="text" id="loginCustomer" required>
+        </div>
 
-        loginForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            const u = document.getElementById('loginUser').value.trim();
-            const c = document.getElementById('loginCustomer').value.trim();
-            const p = document.getElementById('loginPass').value.trim();
+        <div class="form-group">
+          <label>Password</label>
+          <input type="password" id="loginPass" required>
+        </div>
 
-            const result = app.login(u, c, p);
-            if (result.success) {
-                window.location.href = 'dashboard.html';
-            } else {
-                alert(result.message);
-            }
-        });
+        <button class="btn-primary">Sign In</button>
 
-        registerForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            const company = document.getElementById('regCompany').value;
-            const customer = document.getElementById('regCustomer').value;
-            const p = document.getElementById('regPass').value;
-            const cp = document.getElementById('regPassConfirm').value;
+        <div class="toggle-auth">
+          Don't have an account?
+          <a onclick="showRegister()">Register Company</a>
+        </div>
+      </form>
 
-            if (p !== cp) return alert("Passwords do not match");
+      <form id="registerForm" class="hidden">
+        <div class="form-group">
+          <label>Company Name</label>
+          <input type="text" id="regCompany" required>
+        </div>
 
-            const result = app.register(company, customer, p);
-            if (result.success) {
-                alert(result.message);
+        <div class="form-group">
+          <label>Customer Name</label>
+          <input type="text" id="regCustomer" required>
+        </div>
 
-                // WhatsApp Admin Notification
-                const adminPhone = "+923330360487";
-                const msg = `*New Registration Request*\n\n*Company:* ${company}\n*Customer:* ${customer}\n\nPlease approve this account.`;
-                const url = `https://wa.me/${adminPhone}?text=${encodeURIComponent(msg)}`;
-                window.open(url, '_blank');
+        <div class="form-group">
+          <label>Password</label>
+          <input type="password" id="regPass" required>
+        </div>
 
-                showLogin();
-            } else {
-                alert(result.message);
-            }
-        });
+        <div class="form-group">
+          <label>Confirm Password</label>
+          <input type="password" id="regPassConfirm" required>
+        </div>
 
-        // Check if already logged in
-        if (app.getCurrentUser()) {
-            window.location.href = 'dashboard.html';
-        }
+        <button class="btn-primary">Register Company</button>
 
-        // Load Banner
-        const bannerUrl = app.getBanner();
-        if (bannerUrl) {
-            document.getElementById('mainBanner').innerHTML = `<img src="${bannerUrl}" style="width: 100%; height: 100%; object-fit: cover;">`;
-        }
-    </script>
-    <!-- WhatsApp Button -->
-    <a href="https://wa.me/+923330360487" target="_blank" class="whatsapp-float">
-        <svg viewBox="0 0 24 24" fill="white" width="32" height="32">
-            <path
-                d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.711 2.592 2.654-.696c1.005.572 2.173.894 3.402.894h.025c3.181 0 5.768-2.587 5.768-5.766.001-3.187-2.575-5.777-5.765-5.777zM12 18.608a6.6 6.6 0 0 1-3.237-.84l-.23-.137-2.712.71.724-2.616-.144-.236A6.64 6.64 0 0 1 5.398 11.96c.001-3.64 2.96-6.59 6.592-6.59s6.666 2.95 6.666 6.59-2.96 6.65-6.656 6.65z" />
-        </svg>
-    </a>
+        <div class="toggle-auth">
+          Already have an account?
+          <a onclick="showLogin()">Sign In</a>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- WhatsApp -->
+  <a href="https://wa.me/+923330360487" target="_blank" class="whatsapp-float">
+    <svg viewBox="0 0 24 24" fill="white" width="28" height="28">
+      <path d="M12 2a10 10 0 0 0-8.7 14.9L2 22l5.3-1.4A10 10 0 1 0 12 2z"/>
+    </svg>
+  </a>
+
+  <script src="script.js"></script>
+  <script>
+    const loginForm = document.getElementById('loginForm');
+    const registerForm = document.getElementById('registerForm');
+    const title = document.querySelector('.brand-title');
+
+    function showRegister() {
+      loginForm.classList.add('hidden');
+      registerForm.classList.remove('hidden');
+      title.textContent = "Register Company";
+    }
+
+    function showLogin() {
+      registerForm.classList.add('hidden');
+      loginForm.classList.remove('hidden');
+      title.textContent = "Welcome Back";
+    }
+
+    loginForm.addEventListener('submit', e => {
+      e.preventDefault();
+      const result = app.login(
+        loginUser.value.trim(),
+        loginCustomer.value.trim(),
+        loginPass.value.trim()
+      );
+      result.success ? location.href = 'dashboard.html' : alert(result.message);
+    });
+
+    registerForm.addEventListener('submit', e => {
+      e.preventDefault();
+      if (regPass.value !== regPassConfirm.value)
+        return alert("Passwords do not match");
+
+      const result = app.register(regCompany.value, regCustomer.value, regPass.value);
+      if (result.success) {
+        const msg = `New Registration\nCompany: ${regCompany.value}\nCustomer: ${regCustomer.value}`;
+        window.open(`https://wa.me/923330360487?text=${encodeURIComponent(msg)}`, '_blank');
+        alert(result.message);
+        showLogin();
+      } else alert(result.message);
+    });
+
+    if (app.getCurrentUser()) location.href = 'dashboard.html';
+
+    const banner = app.getBanner();
+    if (banner) {
+      mainBanner.innerHTML = `<img src="${banner}" style="width:100%;height:100%;object-fit:cover">`;
+    }
+  </script>
+
 </body>
-
 </html>
