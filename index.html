@@ -379,6 +379,38 @@
     if (banner) {
       mainBanner.innerHTML = `<img src="${banner}" style="width:100%;height:100%;object-fit:cover">`;
     }
+	
+	function showGreenStatus() {
+  const el = document.createElement("div");
+  el.textContent = "✓ Connected! Data Synced Successfully";
+  el.style.cssText = `
+    position: fixed;
+    top: 12px;
+    right: 12px;
+    background: #16a34a;
+    color: white;
+    padding: 6px 14px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 500;
+    z-index: 9999;
+  `;
+  document.body.appendChild(el);
+
+  setTimeout(() => el.remove(), 3000);
+}
+
+fetch(SHEET_API_URL)
+  .then(res => res.json())
+  .then(data => {
+    if (data.status === "connected") {
+      showGreenStatus();   // 👈 THIS LINE
+    }
+  })
+  .catch(err => {
+    console.error("Cloud error:", err);
+  });
+
   </script>
 
 </body>
