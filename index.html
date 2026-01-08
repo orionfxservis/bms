@@ -329,10 +329,6 @@
     .trim();
 }
 
-	const company = normalizeText(loginUser.value);
-	const customer = normalizeText(loginCustomer.value);
-	const password = loginPass.value.trim();
-
     const loginForm = document.getElementById('loginForm');
     const registerForm = document.getElementById('registerForm');
     const title = document.querySelector('.brand-title');
@@ -400,16 +396,49 @@
   setTimeout(() => el.remove(), 3000);
 }
 
-fetch(SHEET_API_URL)
+fetch("https://script.google.com/macros/s/AKfycbxSdv1P7xeHZIICdhZszl3V-EMUqnwOZwYq11oINT0Kr2GJqqhh9JxY5AcK-dJi8_TNAQ/exec")
   .then(res => res.json())
   .then(data => {
     if (data.status === "connected") {
-      showGreenStatus();   // 👈 THIS LINE
+      showGreenStatus();
     }
   })
   .catch(err => {
     console.error("Cloud error:", err);
   });
+
+function initNetworkStatus() {
+  if (document.getElementById("netStatus")) return;
+
+  const el = document.createElement("div");
+  el.id = "netStatus";
+  el.style.cssText = `
+    position: fixed;
+    bottom: 20px;
+    right: 75px;
+    color: white;
+    padding: 6px 14px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 500;
+    z-index: 9999;
+  `;
+  document.body.appendChild(el);
+
+  function update() {
+    const online = navigator.onLine;
+    el.textContent = online ? "🟢 Online" : "🔴 Offline";
+    el.style.background = online ? "#16a34a" : "#dc2626";
+  }
+
+  window.addEventListener("online", update);
+  window.addEventListener("offline", update);
+  update();
+}
+
+document.addEventListener("DOMContentLoaded", initNetworkStatus);
+
+
 
   </script>
 
