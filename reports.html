@@ -81,120 +81,133 @@
         </ul>
     </nav>
 
-    <div class="container">
-        <!-- Tabs -->
-        <div class="tabs">
-            <button class="tab active" onclick="switchTab('stock')">Stock Report</button>
-            <button class="tab" onclick="switchTab('sales')">Sales Report</button>
-            <button class="tab" onclick="switchTab('purchase')">Purchase Report</button>
-            <button class="tab" onclick="switchTab('expense')">Expense Report</button>
-        </div>
+    <div class="container" style="display: flex; gap: 2rem; flex-wrap: wrap;">
 
-        <!-- Stock Report -->
-        <div id="stockSection" class="report-section active">
-            <div class="glass-panel card">
-                <div class="filter-bar">
-                    <input type="text" id="stockFilter" placeholder="Filter by Item Name..." onkeyup="renderStock()">
-                </div>
-                <div class="table-container">
-                    <table id="stockTable">
-                        <thead>
-                            <tr>
-                                <th>Item Name</th>
-                                <th>Quantity Available</th>
-                                <th>Est. Cost (Avg)</th>
-                            </tr>
-                        </thead>
-                        <tbody></tbody>
-                    </table>
-                </div>
+        <div style="flex: 1; min-width: 0;">
+            <!-- Tabs -->
+            <div class="tabs">
+                <button class="tab active" onclick="switchTab('stock')">Stock Report</button>
+                <button class="tab" onclick="switchTab('sales')">Sales Report</button>
+                <button class="tab" onclick="switchTab('purchase')">Purchase Report</button>
+                <button class="tab" onclick="switchTab('expense')">Expense Report</button>
             </div>
-        </div>
 
-        <!-- Sales Report -->
-        <div id="salesSection" class="report-section">
-            <div class="glass-panel card">
-                <div class="filter-bar">
-                    <select id="saleTimeFilter" onchange="renderSales()">
-                        <option value="all">All Time</option>
-                        <option value="today">Today</option>
-                        <option value="week">This Week</option>
-                        <option value="month">This Month</option>
-                    </select>
-                </div>
-                <div class="table-container">
-                    <table id="salesTable">
-                        <thead>
-                            <tr>
-                                <th>Date</th>
-                                <th>Item</th>
-                                <th>Quantity</th>
-                                <th>Unit Price</th>
-                                <th>Total</th>
-                            </tr>
-                        </thead>
-                        <tbody></tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-
-        <!-- Purchase Report -->
-        <div id="purchaseSection" class="report-section">
-            <div class="glass-panel card">
-                <div class="filter-bar">
-                    <select id="purchaseFilterType">
-                        <option value="vendor">Vendor Name</option>
-                        <option value="item">Item Name</option>
-                    </select>
-                    <input type="text" id="purchaseFilterVal" placeholder="Search..." onkeyup="renderPurchases()">
-                </div>
-                <div class="table-container">
-                    <table id="purchaseTable">
-                        <thead>
-                            <tr>
-                                <th>Date</th>
-                                <th>Vendor</th>
-                                <th>Category</th>
-                                <th>Brand</th>
-                                <th>Model</th>
-                                <th>Quantity</th>
-                                <th>Cost</th>
-                                <th>Payment</th>
-                            </tr>
-                        </thead>
-                        <tbody></tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-
-        <!-- Expense Report -->
-        <div id="expenseSection" class="report-section">
-            <div class="glass-panel card">
-                <div class="filter-bar">
-                    <select id="expenseTimeFilter" onchange="toggleExpenseMonthPicker()">
-                        <option value="all">All Time</option>
-                        <option value="week">This Week</option>
-                        <option value="month">Monthly</option>
-                    </select>
-                    <input type="month" id="expenseMonthPicker" style="display:none;" onchange="renderExpenses()">
-                    <div style="margin-left: auto; font-weight: bold; color: var(--accent-color);">
-                        Total: <span id="reportTotalExpense">Rs. 0</span>
+            <!-- Stock Report -->
+            <div id="stockSection" class="report-section active">
+                <div class="glass-panel card">
+                    <div class="filter-bar">
+                        <input type="text" id="stockFilter" placeholder="Filter by Item Name..."
+                            onkeyup="renderStock()">
+                    </div>
+                    <div class="table-container">
+                        <table id="stockTable">
+                            <thead>
+                                <tr>
+                                    <th>Item Name</th>
+                                    <th>Quantity Available</th>
+                                    <th>Est. Cost (Avg)</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
                     </div>
                 </div>
-                <div class="table-container">
-                    <table id="expenseTable">
-                        <thead>
-                            <tr>
-                                <th>Date</th>
-                                <th>Expense Name</th>
-                                <th>Amount</th>
-                            </tr>
-                        </thead>
-                        <tbody></tbody>
-                    </table>
+            </div>
+
+            <!-- Sales Report -->
+            <div id="salesSection" class="report-section">
+                <div class="glass-panel card">
+                    <div class="filter-bar">
+                        <select id="saleTimeFilter" onchange="renderSales()">
+                            <option value="all">All Time</option>
+                            <option value="today">Today</option>
+                            <option value="week">This Week</option>
+                            <option value="month">This Month</option>
+                        </select>
+                    </div>
+                    <div class="table-container">
+                        <table id="salesTable">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Item</th>
+                                    <th>Quantity</th>
+                                    <th>Unit Price</th>
+                                    <th>Total</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
                 </div>
+            </div>
+
+            <!-- Purchase Report -->
+            <div id="purchaseSection" class="report-section">
+                <div class="glass-panel card">
+                    <div class="filter-bar">
+                        <select id="purchaseFilterType">
+                            <option value="vendor">Vendor Name</option>
+                            <option value="item">Item Name</option>
+                        </select>
+                        <input type="text" id="purchaseFilterVal" placeholder="Search..." onkeyup="renderPurchases()">
+                    </div>
+                    <div class="table-container">
+                        <table id="purchaseTable">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Vendor</th>
+                                    <th>Category</th>
+                                    <th>Brand</th>
+                                    <th>Model</th>
+                                    <th>Quantity</th>
+                                    <th>Cost</th>
+                                    <th>Payment</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Expense Report -->
+            <div id="expenseSection" class="report-section">
+                <div class="glass-panel card">
+                    <div class="filter-bar">
+                        <select id="expenseTimeFilter" onchange="toggleExpenseMonthPicker()">
+                            <option value="all">All Time</option>
+                            <option value="week">This Week</option>
+                            <option value="month">Monthly</option>
+                        </select>
+                        <input type="month" id="expenseMonthPicker" style="display:none;" onchange="renderExpenses()">
+                        <div style="margin-left: auto; font-weight: bold; color: var(--accent-color);">
+                            Total: <span id="reportTotalExpense">Rs. 0</span>
+                        </div>
+                    </div>
+                    <div class="table-container">
+                        <table id="expenseTable">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Expense Name</th>
+                                    <th>Amount</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Vertical Banner Sidebar -->
+        <div class="vertical-banner-container" style="width: 120px; flex-shrink: 0; display: none;">
+            <div class="glass-panel"
+                style="width: 120px; height: 240px; overflow: hidden; display: flex; align-items: center; justify-content: center; background: rgba(255,255,255,0.05);">
+                <img id="verticalBannerImg" src="" style="width: 100%; height: 100%; object-fit: cover; display: none;"
+                    onerror="this.style.display='none'">
             </div>
         </div>
     </div>
@@ -202,6 +215,15 @@
     <script src="script.js"></script>
     <script>
         app.checkAuth();
+
+        // Load Vertical Banner
+        const vBanner = app.getVerticalBanner();
+        if (vBanner) {
+            document.querySelector('.vertical-banner-container').style.display = 'block';
+            const img = document.getElementById('verticalBannerImg');
+            img.src = vBanner;
+            img.style.display = 'block';
+        }
 
         // Data
         const inventory = app.getInventory();

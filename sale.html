@@ -26,36 +26,57 @@
         </ul>
     </nav>
 
-    <div class="container">
-        <header class="hero" style="text-align: left; padding: 1rem 0;">
-            <h1>New Sale</h1>
-            <p>Process a customer order.</p>
-        </header>
+    <div class="container" style="display: flex; gap: 2rem; flex-wrap: wrap;">
+        <!-- Main Content -->
+        <div style="flex: 1; min-width: 0;">
+            <header class="hero" style="text-align: left; padding: 1rem 0;">
+                <h1>New Sale</h1>
+                <p>Process a customer order.</p>
+            </header>
 
-        <div class="glass-panel card" style="max-width: 600px; margin: 0 auto;">
-            <form id="saleForm">
-                <div class="form-group">
-                    <label>Select Item (Stock Available)</label>
-                    <select id="sItem" required>
-                        <option value="">Loading...</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>Quantity</label>
-                    <input type="number" id="sQty" min="1" required>
-                </div>
-                <div class="form-group">
-                    <label>Selling Price Per Unit (Rs.)</label>
-                    <input type="number" id="sPrice" min="0.01" step="0.01" required>
-                </div>
-                <button type="submit" class="btn-primary" style="width: 100%">Record Sale</button>
-            </form>
+            <div class="glass-panel card" style="max-width: 600px; margin: 0 auto;">
+                <form id="saleForm">
+                    <div class="form-group">
+                        <label>Select Item (Stock Available)</label>
+                        <select id="sItem" required>
+                            <option value="">Loading...</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Quantity</label>
+                        <input type="number" id="sQty" min="1" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Selling Price Per Unit (Rs.)</label>
+                        <input type="number" id="sPrice" min="0.01" step="0.01" required>
+                    </div>
+                    <button type="submit" class="btn-primary" style="width: 100%">Record Sale</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Vertical Banner Sidebar -->
+        <div class="vertical-banner-container" style="width: 120px; flex-shrink: 0; display: none;">
+            <div class="glass-panel"
+                style="width: 120px; height: 240px; overflow: hidden; display: flex; align-items: center; justify-content: center; background: rgba(255,255,255,0.05);">
+                <img id="verticalBannerImg" src="" style="width: 100%; height: 100%; object-fit: cover; display: none;"
+                    onerror="this.style.display='none'">
+            </div>
         </div>
     </div>
 
     <script src="script.js"></script>
     <script>
         app.checkAuth();
+
+        // Load Vertical Banner
+        const vBanner = app.getVerticalBanner();
+        if (vBanner) {
+            document.querySelector('.vertical-banner-container').style.display = 'block';
+            const img = document.getElementById('verticalBannerImg');
+            img.src = vBanner;
+            img.style.display = 'block';
+        }
 
         const itemSelect = document.getElementById('sItem');
         const inventory = app.getInventory();

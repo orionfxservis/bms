@@ -26,53 +26,74 @@
         </ul>
     </nav>
 
-    <div class="container">
-        <header class="hero" style="text-align: left; padding: 1rem 0;">
-            <h1>Purchase Entry</h1>
-            <p>Add new stock or inventory items.</p>
-        </header>
+    <div class="container" style="display: flex; gap: 2rem; flex-wrap: wrap;">
+        <!-- Main Content -->
+        <div style="flex: 1; min-width: 0;">
+            <header class="hero" style="text-align: left; padding: 1rem 0;">
+                <h1>Purchase Entry</h1>
+                <p>Add new stock or inventory items.</p>
+            </header>
 
-        <div class="glass-panel card" style="max-width: 600px; margin: 0 auto;">
-            <form id="purchaseForm">
-                <div class="form-group">
-                    <label>Vendor Name</label>
-                    <input type="text" id="pVendor" required placeholder="e.g. ABC Suppliers">
-                </div>
-                <div class="form-group">
-                    <label>Category</label>
-                    <input type="text" id="pCategory" required placeholder="e.g. Smartphone">
-                </div>
-                <div class="form-group">
-                    <label>Brand Name</label>
-                    <input type="text" id="pBrand" required placeholder="e.g. Samsung">
-                </div>
-                <div class="form-group">
-                    <label>Model</label>
-                    <input type="text" id="pModel" required placeholder="e.g. Galaxy S24">
-                </div>
-                <div class="form-group">
-                    <label>Quantity</label>
-                    <input type="number" id="pQty" min="1" required>
-                </div>
-                <div class="form-group">
-                    <label>Price (Rs.)</label>
-                    <input type="number" id="pCost" min="0.01" step="0.01" required>
-                </div>
-                <div class="form-group">
-                    <label>Payment Method</label>
-                    <select id="pPayment" required>
-                        <option value="Cash">Cash</option>
-                        <option value="Credit">Credit</option>
-                    </select>
-                </div>
-                <button type="submit" class="btn-primary" style="width: 100%">Add to Inventory</button>
-            </form>
+            <div class="glass-panel card" style="max-width: 600px; margin: 0 auto;">
+                <form id="purchaseForm">
+                    <div class="form-group">
+                        <label>Vendor Name</label>
+                        <input type="text" id="pVendor" required placeholder="e.g. ABC Suppliers">
+                    </div>
+                    <div class="form-group">
+                        <label>Category</label>
+                        <input type="text" id="pCategory" required placeholder="e.g. Smartphone">
+                    </div>
+                    <div class="form-group">
+                        <label>Brand Name</label>
+                        <input type="text" id="pBrand" required placeholder="e.g. Samsung">
+                    </div>
+                    <div class="form-group">
+                        <label>Model</label>
+                        <input type="text" id="pModel" required placeholder="e.g. Galaxy S24">
+                    </div>
+                    <div class="form-group">
+                        <label>Quantity</label>
+                        <input type="number" id="pQty" min="1" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Price (Rs.)</label>
+                        <input type="number" id="pCost" min="0.01" step="0.01" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Payment Method</label>
+                        <select id="pPayment" required>
+                            <option value="Cash">Cash</option>
+                            <option value="Credit">Credit</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn-primary" style="width: 100%">Add to Inventory</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Vertical Banner Sidebar -->
+        <div class="vertical-banner-container" style="width: 120px; flex-shrink: 0; display: none;">
+            <div class="glass-panel"
+                style="width: 120px; height: 240px; overflow: hidden; display: flex; align-items: center; justify-content: center; background: rgba(255,255,255,0.05);">
+                <img id="verticalBannerImg" src="" style="width: 100%; height: 100%; object-fit: cover; display: none;"
+                    onerror="this.style.display='none'">
+            </div>
         </div>
     </div>
 
     <script src="script.js"></script>
     <script>
         app.checkAuth();
+
+        // Load Vertical Banner
+        const vBanner = app.getVerticalBanner();
+        if (vBanner) {
+            document.querySelector('.vertical-banner-container').style.display = 'block';
+            const img = document.getElementById('verticalBannerImg');
+            img.src = vBanner;
+            img.style.display = 'block';
+        }
 
         document.getElementById('purchaseForm').addEventListener('submit', (e) => {
             e.preventDefault();

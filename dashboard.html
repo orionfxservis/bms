@@ -26,48 +26,60 @@
         </ul>
     </nav>
 
-    <div class="container">
-        <header class="hero" style="text-align: left; padding: 1rem 0;">
-            <h1 id="welcomeSafe">Dashboard</h1>
-            <p>Welcome back, here is your daily overview.</p>
-        </header>
+    <div class="container" style="display: flex; gap: 2rem; flex-wrap: wrap;">
+        <!-- Main Content -->
+        <div style="flex: 1; min-width: 0;">
+            <header class="hero" style="text-align: left; padding: 1rem 0;">
+                <h1 id="welcomeSafe">Dashboard</h1>
+                <p>Welcome back, here is your daily overview.</p>
+            </header>
 
-        <div class="card-grid">
-            <div class="glass-panel card">
-                <h3>Total Products</h3>
-                <div class="value" id="totalProducts">0</div>
+            <div class="card-grid">
+                <div class="glass-panel card">
+                    <h3>Total Products</h3>
+                    <div class="value" id="totalProducts">0</div>
+                </div>
+                <div class="glass-panel card">
+                    <h3>Total Quantity</h3>
+                    <div class="value" id="totalQty">0</div>
+                </div>
+                <div class="glass-panel card">
+                    <h3>Sales Today</h3>
+                    <div class="value" id="salesToday">Rs. 0</div>
+                </div>
+                <div class="glass-panel card">
+                    <h3>Low Stock Items</h3>
+                    <div class="value" id="lowStock">0</div>
+                </div>
             </div>
-            <div class="glass-panel card">
-                <h3>Total Quantity</h3>
-                <div class="value" id="totalQty">0</div>
-            </div>
-            <div class="glass-panel card">
-                <h3>Sales Today</h3>
-                <div class="value" id="salesToday">Rs. 0</div>
-            </div>
-            <div class="glass-panel card">
-                <h3>Low Stock Items</h3>
-                <div class="value" id="lowStock">0</div>
+
+            <div class="glass-panel card mt-4">
+                <h3>Recent Activity</h3>
+                <div class="table-container">
+                    <table id="recentActivityTable">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Type</th>
+                                <th>Item</th>
+                                <th>Quantity</th>
+                                <th>Value</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Populated by JS -->
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
 
-        <div class="glass-panel card mt-4">
-            <h3>Recent Activity</h3>
-            <div class="table-container">
-                <table id="recentActivityTable">
-                    <thead>
-                        <tr>
-                            <th>Date</th>
-                            <th>Type</th>
-                            <th>Item</th>
-                            <th>Quantity</th>
-                            <th>Value</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <!-- Populated by JS -->
-                    </tbody>
-                </table>
+        <!-- Vertical Banner Sidebar -->
+        <div class="vertical-banner-container" style="width: 120px; flex-shrink: 0; display: none;">
+            <div class="glass-panel"
+                style="width: 120px; height: 240px; overflow: hidden; display: flex; align-items: center; justify-content: center; background: rgba(255,255,255,0.05);">
+                <img id="verticalBannerImg" src="" style="width: 100%; height: 100%; object-fit: cover; display: none;"
+                    onerror="this.style.display='none'">
             </div>
         </div>
     </div>
@@ -146,6 +158,15 @@
                         `;
                 tbody.appendChild(tr);
             });
+        }
+
+        // Load Vertical Banner
+        const vBanner = app.getVerticalBanner();
+        if (vBanner) {
+            document.querySelector('.vertical-banner-container').style.display = 'block';
+            const img = document.getElementById('verticalBannerImg');
+            img.src = vBanner;
+            img.style.display = 'block';
         }
 
     </script>

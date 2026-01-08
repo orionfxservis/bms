@@ -202,6 +202,15 @@ class BMS_Core {
         return true;
     }
 
+    getVerticalBanner() {
+        return localStorage.getItem(DB_KEYS.VERTICAL_BANNER) || '';
+    }
+
+    setVerticalBanner(url) {
+        localStorage.setItem(DB_KEYS.VERTICAL_BANNER, url);
+        return true;
+    }
+
     // --- Inventory Management ---
     getInventory() {
         const allInventory = JSON.parse(localStorage.getItem(DB_KEYS.INVENTORY)) || [];

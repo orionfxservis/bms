@@ -254,17 +254,18 @@ button.btn-danger {
 }
 
 .card {
-    padding: 1.5rem;
+    padding: 1rem;
 }
 
 .card h3 {
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.25rem;
     color: var(--primary-color);
+    font-size: 0.9rem;
     /* Indigo for better contrast on white */
 }
 
 .card .value {
-    font-size: 2rem;
+    font-size: 1.5rem;
     font-weight: 700;
 }
 

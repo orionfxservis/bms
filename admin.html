@@ -34,6 +34,7 @@
 
         <div class="glass-panel card" style="margin-bottom: 2rem;">
             <h3>Banner Management</h3>
+            <h4>Horizontal Banner (Login Page)</h4>
             <div id="bannerPreview"
                 style="margin-bottom: 1rem; max-width: 100%; width: 720px; height: 120px; background: rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: center; border-radius: 8px; overflow: hidden;">
                 <!-- Preview -->
@@ -44,7 +45,24 @@
                 <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
                     <input type="text" id="bannerUrlInput" placeholder="https://example.com/banner.jpg"
                         style="flex: 1; min-width: 200px;">
-                    <button onclick="updateBanner()" class="btn-primary">Update Banner</button>
+                    <button onclick="updateBanner()" class="btn-primary">Update Horizontal</button>
+                </div>
+            </div>
+
+            <hr style="border: 0; border-top: 1px solid rgba(255,255,255,0.1); margin: 1.5rem 0;">
+
+            <h4>Vertical Banner (All Pages - 120x240px)</h4>
+            <div id="vBannerPreview"
+                style="margin-bottom: 1rem; width: 120px; height: 240px; background: rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: center; border-radius: 8px; overflow: hidden;">
+                <!-- Preview -->
+                <span class="text-muted" style="font-size: 0.8rem; text-align: center;">No Banner</span>
+            </div>
+            <div class="form-group">
+                <label>Vertical Banner URL (120x240px)</label>
+                <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                    <input type="text" id="vBannerUrlInput" placeholder="https://example.com/vbanner.jpg"
+                        style="flex: 1; min-width: 200px;">
+                    <button onclick="updateVerticalBanner()" class="btn-primary">Update Vertical</button>
                 </div>
             </div>
         </div>
@@ -79,16 +97,33 @@
         const bannerInput = document.getElementById('bannerUrlInput');
         const bannerPreview = document.getElementById('bannerPreview');
 
+        const vBannerUrl = app.getVerticalBanner();
+        const vBannerInput = document.getElementById('vBannerUrlInput');
+        const vBannerPreview = document.getElementById('vBannerPreview');
+
         if (bannerUrl) {
             bannerInput.value = bannerUrl;
             bannerPreview.innerHTML = `<img src="${bannerUrl}" style="width: 100%; height: 100%; object-fit: cover;">`;
+        }
+
+        if (vBannerUrl) {
+            vBannerInput.value = vBannerUrl;
+            vBannerPreview.innerHTML = `<img src="${vBannerUrl}" style="width: 100%; height: 100%; object-fit: cover;">`;
         }
 
         window.updateBanner = function () {
             const url = bannerInput.value;
             if (app.setBanner(url)) {
                 bannerPreview.innerHTML = `<img src="${url}" style="width: 100%; height: 100%; object-fit: cover;">`;
-                alert('Banner updated! Check the Login page.');
+                alert('Horizontal Banner updated! Check the Login page.');
+            }
+        };
+
+        window.updateVerticalBanner = function () {
+            const url = vBannerInput.value;
+            if (app.setVerticalBanner(url)) {
+                vBannerPreview.innerHTML = `<img src="${url}" style="width: 100%; height: 100%; object-fit: cover;">`;
+                alert('Vertical Banner updated! Check Dashboard pages.');
             }
         };
 
