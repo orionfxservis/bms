@@ -67,6 +67,27 @@
             </div>
         </div>
 
+        <!-- Cloud Sync Config -->
+        <div class="glass-panel card" style="margin-bottom: 2rem;">
+            <h3>Cloud Database (Google Sheets)</h3>
+            <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1rem;">
+                Connect a Google Sheet Web App to enable background backup and sync.
+                <br>
+                1. Deploy the Google Apps Script first.
+                <br>
+                2. Paste the Web App URL below.
+            </p>
+            <div class="form-group">
+                <label>Google Web App URL</label>
+                <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                    <input type="text" id="cloudUrlInput" placeholder="https://script.google.com/macros/s/.../exec"
+                        style="flex: 1; min-width: 200px;">
+                    <button onclick="updateCloudUrl()" class="btn-primary">Connect & Sync</button>
+                </div>
+                <div id="cloudStatus" style="margin-top: 0.5rem; font-size: 0.9rem;"></div>
+            </div>
+        </div>
+
         <div class="glass-panel card">
             <div class="table-container">
                 <table id="userTable">
@@ -110,6 +131,60 @@
             vBannerInput.value = vBannerUrl;
             vBannerPreview.innerHTML = `<img src="${vBannerUrl}" style="width: 100%; height: 100%; object-fit: cover;">`;
         }
+
+        // Cloud Logic
+        const cloudUrlInput = document.getElementById('cloudUrlInput');
+        const cloudStatus = document.getElementById('cloudStatus');
+        const currentCloudUrl = app.cloud.getUrl();
+
+        if (currentCloudUrl) {
+            cloudUrlInput.value = currentCloudUrl;
+            cloudStatus.textContent = 'Cloud Configured. Background Sync Active.';
+            cloudStatus.style.color = '#34d399';
+        }
+
+        window.updateCloudUrl = async function () {
+            const url = cloudUrlInput.value.trim();
+            if (!url) return alert('Please enter a URL');
+
+            // 1. Basic Validation
+            if (!url.includes('script.google.com')) {
+                return alert('Invalid URL. It must be a Google Script URL.');
+            }
+            if (!url.endsWith('/exec')) {
+                return alert('Invalid URL. \n\nIt must end with "/exec". \n\nMake sure you copied the "Web App URL" from the Deployment window, not the browser address bar.');
+            }
+
+            app.cloud.setUrl(url);
+            cloudStatus.textContent = 'Testing Connection... (This may take a few seconds)';
+            cloudStatus.style.color = '#fbbf24'; // Yellow
+
+            try {
+                const res = await app.cloud.syncDown();
+
+                if (res.success) {
+                    cloudStatus.textContent = 'Connected! ' + res.message;
+                    cloudStatus.style.color = '#34d399'; // Green
+                    alert('Success! Connected and Data Synced.');
+                } else {
+                    console.error('Sync Error:', res);
+                    cloudStatus.textContent = 'Error: ' + res.message;
+                    cloudStatus.style.color = '#f87171'; // Red
+
+                    // User friendly error mapping
+                    let msg = res.message;
+                    if (msg.includes('Unexpected token')) msg = 'Got HTML instead of Data. \npermission Issue? \nDid you set "Who has access" to "Anyone"?';
+                    if (msg.includes('Failed to fetch')) msg = 'Network Error. \nPossible CORS issue. \nTry using a different browser or Incognito mode to test.';
+
+                    alert('Connection Failed:\n' + msg);
+                }
+            } catch (err) {
+                console.error('Unexpected Error:', err);
+                cloudStatus.textContent = 'Critical Error: ' + err.message;
+                cloudStatus.style.color = '#ef4444';
+                alert('Critical Error:\n' + err.message);
+            }
+        };
 
         window.updateBanner = function () {
             const url = bannerInput.value;
