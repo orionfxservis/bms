@@ -65,15 +65,16 @@
     }
 
     .auth-card {
-      width: 100%;
-      max-width: 380px;
-      padding: 1.5rem;
-      background: var(--bg-card);
-      backdrop-filter: blur(10px);
-      border-radius: 16px;
-      border: 1px solid var(--border-soft);
-      box-shadow: 0 15px 40px rgba(0,0,0,0.08);
-    }
+  width: 100%;
+  max-width: 380px;
+  padding: 1.6rem;
+  background: rgba(241, 245, 249, 0.75); /* slightly darker */
+  border-radius: 16px;
+  border: 1px solid rgba(15, 23, 42, 0.15);
+  box-shadow:
+    0 20px 45px rgba(15, 23, 42, 0.15),
+    inset 0 1px 0 rgba(255,255,255,0.6);
+}
 
     /* =========================
        BRAND CONTENT
@@ -137,19 +138,21 @@
     }
 
     input {
-      width: 100%;
-      padding: 0.65rem;
-      border-radius: 8px;
-      border: 1px solid var(--border-soft);
-      background: white;
-      color: var(--text-main);
-      outline: none;
-      font-size: 16px;
-    }
+  width: 100%;
+  padding: 0.7rem;
+  border-radius: 8px;
+  border: 1.5px solid rgba(15, 23, 42, 0.25); /* visible outline */
+  background: #ffffff;
+  color: var(--text-main);
+  outline: none;
+  font-size: 16px;
+  transition: all 0.2s ease;
+}
 
     input:focus {
-      border-color: var(--primary-color);
-    }
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+}
 
     .btn-primary {
       width: 100%;
@@ -225,6 +228,10 @@
         min-height: 80px;
       }
     }
+	
+	input:hover {
+  border-color: rgba(37, 99, 235, 0.4);
+}
   </style>
 </head>
 
@@ -315,6 +322,17 @@
 
   <script src="script.js"></script>
   <script>
+  function normalizeText(text) {
+  return text
+    .toLowerCase()
+    .replace(/\s+/g, ' ')   // collapse multiple spaces
+    .trim();
+}
+
+	const company = normalizeText(loginUser.value);
+	const customer = normalizeText(loginCustomer.value);
+	const password = loginPass.value.trim();
+
     const loginForm = document.getElementById('loginForm');
     const registerForm = document.getElementById('registerForm');
     const title = document.querySelector('.brand-title');
