@@ -335,19 +335,87 @@ th {
 
 /* Mobile Optimizations */
 @media (max-width: 768px) {
+    .navbar {
+        padding: 1rem;
+    }
+
+    .menu-toggle {
+        display: block;
+    }
+
+    .nav-links {
+        display: none;
+        /* JS will toggle this */
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        flex-direction: column;
+        background: #0f172a;
+        /* Dark Background for Mobile Menu */
+        padding: 1rem;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        gap: 0.5rem;
+    }
+
+    .nav-links.show {
+        display: flex;
+    }
+
+    /* Main Layout Reflow */
     .container {
         padding: 0 1rem;
-        /* Ensure padding on small screens */
+        flex-direction: column !important;
+        /* Force stack */
+        flex-wrap: nowrap !important;
+        /* Stack vertically */
+    }
+
+    /* Ensure direct children of container take full width */
+    .container>div {
+        width: 100% !important;
+        flex: none !important;
+        min-width: 0 !important;
+    }
+
+    /* Order content: Main Content First, Banner Last */
+    .vertical-banner-container {
+        order: 2;
+        /* Move to bottom */
+        width: 100% !important;
+        /* Full width container for banner */
+        display: flex;
+        justify-content: center;
+        /* Center the banner */
+        margin-top: 2rem;
+    }
+
+    .vertical-banner-container .glass-panel {
+        /* Keep original dimensions or adapt? 
+           User said "reduce size" previously, but for vertical banner 
+           we probably just want to show it centered at bottom.
+        */
+        height: 120px !important;
+        /* Rotate to horizontal-ish or just keep? */
+        width: 100% !important;
+        max-width: 320px;
+    }
+
+    /* Adjust Banner Image to fit the new horizontal-ish container if needed,
+       OR just keep it 120x240 but centered. 
+       Let's keep it simple: Center the 120x240 vertical banner at the bottom.
+    */
+    .vertical-banner-container .glass-panel {
+        height: 240px !important;
+        width: 120px !important;
     }
 
     .card {
         padding: 1rem;
-        /* Compact padding for cards */
     }
 
     .hero h1 {
         font-size: 2rem;
-        /* Smaller heading on mobile */
     }
 
     /* Filter Bar Stacking */
@@ -361,21 +429,14 @@ th {
     .filter-bar input {
         width: 100%;
         margin: 0 !important;
-        /* Reset margins */
     }
 
-    /* Auth Card specific mobile reset */
-    .auth-card {
-        padding: 1rem;
-    }
-
-    /* Adjust table fonts for readability */
+    /* Table Improvements */
     th,
     td {
         padding: 0.75rem 0.5rem;
         font-size: 0.85rem;
         white-space: nowrap;
-        /* Prevent awkward wrapping in dense tables */
     }
 
     .table-container {
@@ -384,5 +445,7 @@ th {
         padding-left: 1rem;
         padding-right: 1rem;
         width: calc(100% + 2rem);
+        border-radius: 0;
+        /* Remove radius on full bleed */
     }
 }

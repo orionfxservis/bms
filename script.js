@@ -160,7 +160,7 @@ class BMS_Core {
         }
 
         // 2. Check Customer Name
-        if ((companyMatch.contactPerson || '').toLowerCase() !== customerName.toLowerCase()) {
+        if ((companyMatch.contactPerson || '').trim().toLowerCase() !== customerName.toLowerCase()) {
             return { success: false, message: `Incorrect Customer Name for '${username}'.` };
         }
 
