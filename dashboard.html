@@ -168,6 +168,14 @@
             img.src = vBanner;
             img.style.display = 'block';
         }
+		
+		function getTrialRemainingDays(user) {
+  const start = new Date(user.trialStart);
+  const today = new Date();
+  const diff = Math.floor((today - start) / (1000 * 60 * 60 * 24));
+  return Math.max(user.trialDays - diff, 0);
+}
+
 
     </script>
 </body>

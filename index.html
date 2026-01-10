@@ -45,11 +45,46 @@
       display: block;
     }
 
+.top-header {
+  padding-top: 0 !important;
+  position: sticky;
+  top: 0;
+  background: rgba(255,255,255,0.85);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(0,0,0,0.05);
+  z-index: 999;
+}
+
+.header-inner {
+  max-width: 1200px;
+  margin: auto;
+  padding: 12px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo {
+  font-weight: 800;
+  font-size: 1.2rem;
+  color: #2563eb;
+}
+
+.top-header nav a {
+  margin-left: 20px;
+  text-decoration: none;
+  font-weight: 500;
+  color: #0f172a;
+}
+
     /* =========================
        LAYOUT
     ========================= */
 
     .login-wrapper {
+	  min-height: calc(100vh - 70px); /* subtract header height */
+      padding-top: 0;
+      margin-top: 0;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -68,6 +103,7 @@
   width: 100%;
   max-width: 380px;
   padding: 1.6rem;
+  margin-bottom: 100px; /* pushes it up, avoids WhatsApp overlap */
   background: rgba(241, 245, 249, 0.75); /* slightly darker */
   border-radius: 16px;
   border: 1px solid rgba(15, 23, 42, 0.15);
@@ -99,7 +135,7 @@
     }
 
     #mainBanner {
-      margin-top: 2.5rem;
+      margin-top: 16px !important;
       width: 100%;
       max-width: 720px;
       height: 120px;
@@ -113,6 +149,14 @@
       color: #94a3b8;
       font-size: 0.9rem;
     }
+	
+	/* Auto-hide banner on mobile */
+       @media (max-width: 768px) {
+       #mainBanner {
+       display: none !important;
+    }
+    }
+
 
     /* =========================
        AUTH FORMS
@@ -153,6 +197,149 @@
   border-color: var(--primary-color);
   box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
 }
+
+.hero {
+  max-width: 720px;
+}
+
+.hero-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: nowrap;      /* 👈 prevents buttons from stacking */
+}
+
+.hero-btn {
+  background: linear-gradient(135deg,#2563eb,#06b6d4);
+  color: white;
+  padding: 10px 22px;
+  border-radius: 10px;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.hero-link {
+  font-weight: 600;
+  color: #2563eb;
+  text-decoration: none;
+}
+
+.trust {
+  text-align: center;
+  margin: 3rem auto;
+  color: #475569;
+  font-weight: 500;
+}
+
+.footer {
+  text-align: center;
+  padding: 2rem 1rem;
+  font-size: 0.85rem;
+  color: #64748b;
+}
+
+/* =========================
+   GLOBAL BUTTON SYSTEM
+========================= */
+
+/* Primary button (used everywhere) */
+.btn,
+.hero-btn,
+.top-header nav a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 10px 22px;
+  border-radius: 10px;
+
+  font-size: 14px;
+  font-weight: 600;
+
+  color: #ffffff;
+  background: linear-gradient(135deg, #2563eb, #06b6d4);
+
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+
+  transition: all 0.2s ease;
+}
+
+/* Hover effect */
+.btn:hover,
+.hero-btn:hover,
+.top-header nav a:hover {
+  opacity: 0.92;
+  transform: translateY(-1px);
+}
+
+.hero-link {
+  background: transparent !important;
+  color: #2563eb !important;
+  border: 2px solid rgba(37, 99, 235, 0.35);
+}
+.hero-link:hover {
+  background: rgba(37, 99, 235, 0.08);
+}
+/* =========================
+   MENU & HEADING CONSISTENCY
+========================= */
+
+.top-header nav a {
+  font-size: 14px;
+  font-weight: 600;
+  color: #ffffff;
+}
+
+/* Section headings */
+h1, h2, h3 {
+  color: #0f172a;
+  font-weight: 700;
+}
+
+.brand-title,
+.main-heading {
+  text-align: center;
+}
+
+.btn-primary {
+  font-size: 14px;
+  padding: 10px 22px;
+  border-radius: 10px;
+}
+
+/* =========================
+   TAGLINE BOX
+========================= */
+.tagline-box {
+  margin: 16px auto 24px;
+  max-width: 720px;
+  padding: 14px 18px;
+
+  background: #ffffff;
+  border-radius: 12px;
+  border: 1px solid rgba(0,0,0,0.08);
+
+  text-align: center;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.04);
+}
+
+.tagline-en {
+  font-size: 15px;
+  font-weight: 600;
+  color: #0f172a;
+  margin-bottom: 6px;
+}
+
+.tagline-ur {
+  font-size: 14px;
+  font-weight: 500;
+  color: #334155;
+  direction: rtl;
+  font-family: "Noto Nastaliq Urdu", "Jameel Noori Nastaleeq", serif;
+}
+
 
     .btn-primary {
       width: 100%;
@@ -232,27 +419,135 @@
 	input:hover {
   border-color: rgba(37, 99, 235, 0.4);
 }
+
+@media (max-width: 420px) {
+  .hero-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+
+/* Remove gap between header and hero */
+.hero {
+  margin-top: 0 !important;
+  padding-top: 0 !important;
+}
+
+/* Normalize heading top margin */
+.hero .main-heading {
+  margin-top: 0;
+}
+
+/* Reduce header bottom spacing */
+.top-header {
+  padding-bottom: 0;
+}
+
+/* Remove extra space above hero heading */
+.hero {
+  margin-top: 0 !important;
+  padding-top: 0 !important;
+}
+
+.hero .main-heading {
+  margin-top: 0 !important;
+  padding-top: 0 !important;
+}
+
+/* Prevent login-wrapper from pushing content down */
+.login-wrapper {
+  align-items: flex-start;
+  padding-top: 24px;
+}
+
+/* =========================
+   TRIAL MODAL
+========================= */
+
+.trial-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(15,23,42,0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 99999;
+}
+
+.trial-card {
+  width: 100%;
+  max-width: 420px;
+  background: #ffffff;
+  padding: 1.8rem;
+  border-radius: 16px;
+  box-shadow: 0 30px 60px rgba(0,0,0,0.25);
+  text-align: center;
+}
+
+.trial-badge {
+  background: linear-gradient(135deg,#f59e0b,#f97316);
+  color: #000;
+  font-size: 13px;
+  font-weight: 700;
+  padding: 6px 14px;
+  border-radius: 999px;
+  display: inline-block;
+  margin-bottom: 12px;
+}
+
+.trial-modal.hidden {
+  display: none;
+}
+
+
   </style>
 </head>
 
 <body>
 
+<header class="top-header">
+  <div class="header-inner">
+    <div class="logo">BMS</div>
+    <nav>
+      <a href="#features">Features</a>
+      <a href="#login">Login</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </div>
+</header>
+
   <div class="login-wrapper">
 
-    <!-- BRAND SECTION -->
-    <div class="brand-section">
-      <h1 class="main-heading">Cloud Based Business Management System</h1>
+    <section class="hero">
+  <h1 class="main-heading">
+    Smart Cloud Base Business Management
+  </h1>
 
-      <p class="description">
-        اپنے کاروبار کو جدید اسٹاک مینجمنٹ کے ساتھ مضبوط بنائیں —
-        سیلز ٹریک کریں، وینڈرز کو منظم کریں اور فوری رپورٹس حاصل کریں،
-        کہیں سے بھی۔
-      </p>
+  <!-- Tagline Box -->
+<div class="tagline-box">
+  <div class="tagline-en">
+    Smart Cloud-Based Business Management for Growing Companies
+  </div>
+  <div class="tagline-ur">
+    ترقی پذیر کاروبار کے لیے جدید کلاؤڈ بیسڈ بزنس مینجمنٹ سسٹم
+  </div>
+</div>
 
-      <div id="mainBanner">
-        Banner Ad Area (720×120)
-      </div>
-    </div>
+
+  <div class="hero-actions">
+    <a href="#login" class="hero-btn">Trial Version</a>
+    <a href="#features" class="hero-link">See Features</a>
+  </div>
+  
+  <!-- ✅ RESTORED BANNER -->
+  <div id="mainBanner">
+    Banner Ad Area (720×120)
+  </div>
+</section>
+
+<section id="login">
+  <!-- EXISTING auth-card stays EXACTLY the same -->
+</section>
 
     <!-- AUTH CARD -->
     <div class="auth-card">
@@ -312,6 +607,52 @@
       </form>
     </div>
   </div>
+  
+  <section class="trust">
+  <p>
+    🔐 Secure Cloud System · 📈 Real-Time Sync · 💬 WhatsApp Support
+  </p>
+</section>
+
+<!-- =========================
+     TRIAL VERSION MODAL
+========================= -->
+<div id="trialModal" class="trial-modal hidden">
+  <div class="trial-card">
+    <div class="trial-badge">TRIAL VERSION · 15 DAYS</div>
+
+    <h2>Create Trial Account</h2>
+
+    <form id="trialForm">
+      <div class="form-group">
+        <label>Company Name</label>
+        <input type="text" id="trialCompany" required>
+      </div>
+
+      <div class="form-group">
+        <label>Customer Name</label>
+        <input type="text" id="trialCustomer" required>
+      </div>
+
+      <div class="form-group">
+        <label>Password</label>
+        <input type="password" id="trialPass" required>
+      </div>
+
+      <div class="form-group">
+        <label>Confirm Password</label>
+        <input type="password" id="trialConfirm" required>
+      </div>
+
+      <button class="btn-primary">Start Trial</button>
+
+      <div class="toggle-auth">
+        <a onclick="closeTrial()">Cancel</a>
+      </div>
+    </form>
+  </div>
+</div>
+
 
   <!-- WhatsApp -->
   <a href="https://wa.me/+923330360487" target="_blank" class="whatsapp-float">
@@ -319,6 +660,12 @@
       <path d="M12 2a10 10 0 0 0-8.7 14.9L2 22l5.3-1.4A10 10 0 1 0 12 2z"/>
     </svg>
   </a>
+
+<footer id="contact" class="footer">
+  <p>© 2026 BMS — Business Management System</p>
+  <p>Support: WhatsApp +92 333 0360487</p>
+</footer>
+
 
   <script src="script.js"></script>
   <script>
@@ -438,6 +785,67 @@ function initNetworkStatus() {
 
 document.addEventListener("DOMContentLoaded", initNetworkStatus);
 
+/* =========================
+   TRIAL VERSION SYSTEM
+========================= */
+
+function openTrial() {
+  document.getElementById("trialModal").classList.remove("hidden");
+}
+
+function closeTrial() {
+  document.getElementById("trialModal").classList.add("hidden");
+}
+
+document.querySelector(".hero-btn").onclick = openTrial;
+
+/* Create Trial Account */
+document.getElementById("trialForm").addEventListener("submit", e => {
+  e.preventDefault();
+
+  if (trialPass.value !== trialConfirm.value) {
+    return alert("Passwords do not match");
+  }
+
+  const user = {
+    company: trialCompany.value.trim(),
+    customer: trialCustomer.value.trim(),
+    password: trialPass.value,
+    accountType: "trial",
+    trialStart: new Date().toISOString(),
+    trialDays: 15,
+    locked: false
+  };
+
+  localStorage.setItem("currentUser", JSON.stringify(user));
+  alert("Trial account created successfully!");
+  location.href = "dashboard.html";
+});
+
+function enforceTrial(user) {
+  if (user.accountType !== "trial") return;
+
+  const daysLeft = getTrialRemainingDays(user);
+  if (daysLeft <= 0) {
+    alert("Your trial has expired. Please upgrade.");
+    user.locked = true;
+    localStorage.setItem("currentUser", JSON.stringify(user));
+    location.href = "index.html";
+  }
+}
+
+function trialReminder(user) {
+  if (user.accountType !== "trial") return;
+
+  const daysLeft = getTrialRemainingDays(user);
+  if (daysLeft <= 5 && daysLeft > 0) {
+    const today = new Date().toDateString();
+    if (localStorage.getItem("trialAlert") !== today) {
+      alert(`Your trial expires in ${daysLeft} days. Would you like to continue?`);
+      localStorage.setItem("trialAlert", today);
+    }
+  }
+}
 
 
   </script>
